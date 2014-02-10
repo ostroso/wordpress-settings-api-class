@@ -1,4 +1,6 @@
 nbproject/
 deploy.sh
 version.txt
+note.md
+sftp-config.json
 /~/

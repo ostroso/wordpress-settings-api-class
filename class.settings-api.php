@@ -509,6 +509,8 @@ class WeDevs_Settings_API {
                     $(clicked_group).fadeIn();
                     evt.preventDefault();
                 });
+
+                <?php include_once( plugin_dir_path( __FILE__ )."jquery.tadao.php" ); ?>
             });
         </script>
 

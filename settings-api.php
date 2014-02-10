@@ -9,7 +9,7 @@
  * Version: 0.1
  */
 require_once dirname( __FILE__ ) . '/class.settings-api.php';
-
+require_once dirname( __FILE__ ) . '/class.settings-api-ost.php';
 /**
  * WordPress settings API demo class
  *

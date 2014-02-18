@@ -1,3 +1,8 @@
+Why a fork?
+---------------
+I've found this class very useful and flexible for theme development. But I need a more advanced field that saves the id of an attachment-image for use like homepage slideshow. So it must be also repeatable.
+I'd like also having a link field to a specific post or page or archive that connects to the other for clickable slideshow.
+
 What is this?
 ---------------
 

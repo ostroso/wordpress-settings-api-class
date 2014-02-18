@@ -18,17 +18,16 @@ function check_remove_button() {
 		_one_element = false;
 	}
 }
-check_remove_button();
 
 // Event: Remove image
 $('.remove-image-button').on("click", function(e) {
 	e.preventDefault();
 	if(!_one_element){
-	var button = $(this);
-	var id = button.attr('id').replace('-button-delete','');
-	var imgPlace = id+'-img';
-	check_remove_button();
-	button.parent('.media-image-container').remove();
+		var button = $(this);
+		var id = button.attr('id').replace('-button-delete','');
+		var imgPlace = id+'-img';
+		button.parent('.media-image-container').remove();
+		check_remove_button();
 	}
 });
 
@@ -38,7 +37,7 @@ $('.add-image-field').on('click', function(e){
 	var button = $(this);
 	var id = button.attr('id');
 	var td = button.siblings('.image-fields-container');
-	$('.media-image-container').eq(-1).clone().appendTo(td);
+	$('.media-image-container').eq(-1).clone(true, true).appendTo(td);
 	console.log(td);
 	// $('#submit').trigger('click');
 });
@@ -71,19 +70,18 @@ $('.add-image-button').on("click", function(e) {
 				cache: false,
 				success: function(response){
 					var imgPlace = id+'-img';
-					button.siblings("img#"+imgPlace).attr("src",response).css("display","block");
-					var noImg = id+'-no-image-selected';
-					button.siblings("#"+noImg).css("display","none");
+					button.siblings("img#"+imgPlace).attr("src",response)
 				}
 			});
 		} else {
 			return _orig_send_attachment.apply( this, [props, attachment] );
 		}
 	};
-
 	wp.media.editor.open(button);
 	return false;
 });
+$('.image-fields-container').sortable();
+check_remove_button();
 <?php 
 $content = ob_get_clean();
 echo $content;

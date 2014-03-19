@@ -31,34 +31,10 @@ if ( !class_exists( 'WeDevs_Settings_API' ) ):
      */
     private static $_instance;
 
+    
     public function __construct() {
-    	add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
-    	add_action('wp_ajax_get_image_by_ID', array( $this, 'get_image_by_ID_callback') );
+        add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
     }
-
-    /**
-     * Ajax call to obtain image src from ID
-     * @return void
-     */
-    function get_image_by_ID_callback($imgID = false) {
-    	global $wpdb;
-    	if (!$imgID)
-    		$imgID = ( $_POST['imgID'] );
-    	$img_thumb = wp_get_attachment_image_src( $imgID, 'thumbnail');
-    	echo $img_thumb[0];
-    	die(); 
-    }
-
-    /**
-     * Obtain image src from ID
-     * @return void
-     */
-    public function get_image_by_ID($imgID = false) {
-    	global $wpdb;
-    	$img_thumb = wp_get_attachment_image_src( $imgID, 'thumbnail');
-    	return $img_thumb[0];
-    }
-
     /**
      * Enqueue scripts and styles
      */
@@ -70,8 +46,6 @@ if ( !class_exists( 'WeDevs_Settings_API' ) ):
     	wp_enqueue_script( 'jquery' );
     	wp_enqueue_script( 'media-upload' );
     	wp_enqueue_script( 'thickbox' );
-    	// Needed for media uploader
-    	wp_enqueue_media();
 
     }
 
@@ -492,9 +466,12 @@ echo $html;
      * This code uses localstorage for displaying active tabs
      */
     function script() {
-    	?>
-    	<script>
-    	jQuery(document).ready(function($) {
+        if ( class_exists( 'Tadao_Settings_API' ) ){
+            echo Tadao_Settings_API::link_field_dialog();
+        }
+        ?>
+        <script>
+        jQuery(document).ready(function($) {
                 //Initiate Color Picker
                 $('.wp-color-picker-field').wpColorPicker();
                 // Switches option sections
@@ -538,7 +515,7 @@ echo $html;
                 });
                 // "hook" for include additional javascript 
                 <?php include_once( plugin_dir_path( __FILE__ )."jquery.tadao.php" ); ?>
-              });
+            });
 </script>
 
 <style type="text/css">

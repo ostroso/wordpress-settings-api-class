@@ -3,8 +3,14 @@
 ob_start();
 ?>
 // Open the Media Manager
-var _custom_media = true;
+var _custom_media = false;
+var _custom_link = false;
 var _one_element = false;
+var $linkFieldDialog = $('#link-field-dialog');
+var currentLinkField = false;
+var $linkFieldSearch = $("#link-field-search");
+
+
 // Set the original attachment behaviour
 if (wp.media)
 	var _orig_send_attachment = wp.media.editor.send.attachment;
@@ -38,8 +44,79 @@ $('.add-image-field').on('click', function(e){
 	var id = button.attr('id');
 	var td = button.siblings('.image-fields-container');
 	$('.media-image-container').eq(-1).clone(true, true).appendTo(td);
-	console.log(td);
-	// $('#submit').trigger('click');
+});
+
+$linkFieldDialog.dialog({
+	autoOpen: false,
+	show: {
+		effect: "blind",
+		duration: 1000
+	},
+	hide: {
+		effect: "blind",
+		duration: 1000
+	},
+	width: 500,
+	modal: true,
+	buttons: {
+		"Collega Risorsa": function(){
+			console.log(currentLinkField);
+			urlValue = $('li.selected',$linkFieldDialog).data('url');
+			nameValue = $('li.selected span.resource-title',$linkFieldDialog).html();
+			$('#'+currentLinkField.replace('-link-button', '-url')).val(urlValue);
+			$('#'+currentLinkField.replace('-link-button', '-span')).html(nameValue);
+			currentLinkField = false;
+			$(this).dialog('close');
+			$("li", $linkFieldDialog).removeClass('selected');
+		}
+	},
+	close: function(){
+		$("li", $linkFieldDialog).removeClass('selected');
+	}
+});
+$.ajax({
+	url: ajaxurl,
+	type: 'post',
+	data: {
+		action: 'get_resources'
+	},
+	dataType:"json",
+	cache: false,
+	success: function(response){
+		$.each(response, function(index, value){
+			console.log(value.name);
+			if(value.id.indexOf("type:") != -1){
+				$('<li data-url="'+value.id+'"><span class="resource-title">'+value.name+'</span><span class="resource-info"></span></li>').appendTo('#link-field-dialog ul');
+			} else if(value.id.indexOf("category:") != -1){
+				$('<li data-url="'+value.id+'"><span class="resource-title">'+value.name+'</span><span class="resource-info"></span></li>').appendTo('#link-field-dialog ul');
+			}else {
+				$('<li data-url="'+value.id+'"><span class="resource-title">'+value.name+'</span><span class="resource-info"></span></li>').appendTo('#link-field-dialog ul');
+			}
+		});
+		$("li", $linkFieldDialog).on('click', function(e){
+			console.log('click');
+			e.preventDefault();
+			$("li", $linkFieldDialog).removeClass('selected');
+			$(this).addClass('selected');
+		});
+	}
+});
+
+
+$linkFieldSearch.keyup(function(){
+	var filter = $linkFieldSearch.val();
+	$("#link-field-dialog ul li").each(function(){
+		if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+			$(this).fadeOut();
+		} else {
+			$(this).show();
+		}
+	});
+});
+
+$('.link-image-button').on('click', function(e){
+	currentLinkField = $(this).attr("id");
+	$linkFieldDialog.dialog('open');
 });
 
 // Event: add image

@@ -1,0 +1,10 @@
+#link-field-dialog ul{
+	max-height: 200px;
+	overflow-x: hidden;
+}
+#link-field-dialog ul li {
+	cursor: pointer;
+}
+#link-field-dialog ul li.selected {
+	background: #bbb;
+}
